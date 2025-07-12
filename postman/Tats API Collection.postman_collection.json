@@ -1,0 +1,428 @@
+{
+	"info": {
+		"_postman_id": "cedc81d4-5cbb-48be-8b43-57f3a55fbef1",
+		"name": "Tats API Collection",
+		"description": "Complete API collection for testing bolis, recetas, materiales, and stock endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30347343"
+	},
+	"item": [
+		{
+			"name": "Bolis",
+			"item": [
+				{
+					"name": "Create New Boli",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.collectionVariables.set('boli_id', response.id); // Changed from response.data.id to response.id\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sabor\": \"Fresa\",\n  \"cantidad\": 50,\n  \"gananciaPorUnidad\": 1000\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/bolis",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bolis"
+							]
+						},
+						"description": "Create a new boli in the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Bolis",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/bolis",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bolis"
+							]
+						},
+						"description": "Retrieve all bolis from the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Boli by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/bolis/{{boli_name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bolis",
+								"{{boli_name}}"
+							]
+						},
+						"description": "Retrieve a specific boli by its name"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Boli Stock",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"id\": \"{{boli_id}}\",\n    \"cantidad\": 45,\n    \"gananciaPorUnidad\": 800\n  }\n]"
+						},
+						"url": {
+							"raw": "{{base_url}}/bolis",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"bolis"
+							]
+						},
+						"description": "Update stock quantities and profit per unit for bolis"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing bolis (ice cream)"
+		},
+		{
+			"name": "Recetas",
+			"item": [
+				{
+					"name": "Create New Receta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.collectionVariables.set('receta_id', response.id); // Changed from response.data.id to response.id\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Helado de Vainilla\",\n  \"ingredientes\": [\"leche\", \"crema\", \"vainilla\", \"azúcar\"],\n  \"pasos\": [\"Mezclar la leche con la crema\", \"Agregar vainilla y azúcar\", \"Congelar por 4 horas\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recetas"
+							]
+						},
+						"description": "Create a new recipe in the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Recetas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recetas"
+							]
+						},
+						"description": "Retrieve all recipes from the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receta by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/recetas/{{receta_name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recetas",
+								"{{receta_name}}"
+							]
+						},
+						"description": "Retrieve a specific recipe by its name"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Receta",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"id\": \"{{receta_id}}\",\n    \"nombre\": \"Helado de Vainilla Mejorado\",\n    \"ingredientes\": [\"leche entera\", \"crema de leche\", \"vainilla natural\", \"azúcar refinada\"],\n    \"pasos\": [\"Mezclar la leche con la crema\", \"Agregar vainilla natural y azúcar refinada\", \"Congelar por 6 horas\"]\n  }\n]"
+						},
+						"url": {
+							"raw": "{{base_url}}/recetas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"recetas"
+							]
+						},
+						"description": "Update recipe information"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing recipes"
+		},
+		{
+			"name": "Materiales",
+			"item": [
+				{
+					"name": "Create New Material",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.collectionVariables.set('materiales_id', response.id); // Changed from response.data.id to response.id\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Leche\",\n  \"cantidad\": 10,\n  \"unidad\": \"litros\",\n  \"presentacion\": 1,\n  \"precio\": 15.50\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/materiales",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materiales"
+							]
+						},
+						"description": "Create a new material in the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Materiales",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materiales",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materiales"
+							]
+						},
+						"description": "Retrieve all materials from the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Material by Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materiales/{{material_name}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materiales",
+								"{{material_name}}"
+							]
+						},
+						"description": "Retrieve a specific material by its name"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Material Stock",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"id\": \"{{materiales_id}}\",\n    \"cantidad\": 8,\n    \"precio\": 16.00\n  }\n]"
+						},
+						"url": {
+							"raw": "{{base_url}}/materiales",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materiales"
+							]
+						},
+						"description": "Update stock quantities and prices for materials"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing materials"
+		},
+		{
+			"name": "Stock",
+			"item": [
+				{
+					"name": "Get Complete Stock",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/stock",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"stock"
+							]
+						},
+						"description": "Retrieve complete stock information including both bolis and materiales"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for stock management"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		},
+		{
+			"key": "boli_name",
+			"value": "Fresa",
+			"type": "string"
+		},
+		{
+			"key": "receta_name",
+			"value": "Helado de Vainilla",
+			"type": "string"
+		},
+		{
+			"key": "material_name",
+			"value": "Leche",
+			"type": "string"
+		},
+		{
+			"key": "materiales_id",
+			"value": ""
+		}
+	]
+}
