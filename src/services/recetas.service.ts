@@ -53,9 +53,12 @@ const getRecetaByName = async (name: string): Promise<Receta> => {
     try {
         const response = await notion.databases.query({
             database_id: process.env.RECETAS_DB_ID || "",
+            filter: {
+                property: "nombre",
+                rich_text: { equals: name }
+            }
         });
-        const data = response.results;
-        const result = data.find((item: any) => item.properties.nombre.title[0].plain_text === name) as any;
+        const result = response.results[0] as any;
         if (!result) {
             throw new Error("Receta no encontrada");
         }
