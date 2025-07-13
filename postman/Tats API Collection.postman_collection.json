@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "cedc81d4-5cbb-48be-8b43-57f3a55fbef1",
+		"_postman_id": "289c4cb7-50cd-4edc-a8f6-264915d0aad1",
 		"name": "Tats API Collection",
-		"description": "Complete API collection for testing bolis, recetas, materiales, and stock endpoints",
+		"description": "Complete API collection for testing bolis, recetas, materiales, stock, prestamos, and pagos endpoints",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30347343"
 	},
@@ -377,6 +377,288 @@
 				}
 			],
 			"description": "Endpoints for stock management"
+		},
+		{
+			"name": "Prestamos",
+			"item": [
+				{
+					"name": "Create New Prestamo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has id field', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.have.property('id');",
+									"});",
+									"",
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('prestamo_id', response.id);",
+									"    pm.collectionVariables.set('prestamo_nombre', response.nombre);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"fecha\": \"2024-01-15T10:00:00.000Z\",\n  \"monto\": 50000,\n  \"tasa\": 0.05\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/prestamos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"prestamos"
+							]
+						},
+						"description": "Create a new loan in the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Prestamos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.be.an('array');",
+									"});",
+									"",
+									"pm.test('Response has at least one prestamo', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response.length).to.be.at.least(1);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/prestamos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"prestamos"
+							]
+						},
+						"description": "Retrieve all loans from the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Prestamo by Username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has correct nombre', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response.nombre).to.eql('{{prestamo_nombre}}');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/prestamos/Juan Pérez",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"prestamos",
+								"Juan Pérez"
+							]
+						},
+						"description": "Retrieve a specific loan by username"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing loans"
+		},
+		{
+			"name": "Pagos",
+			"item": [
+				{
+					"name": "Create New Pago",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has id field', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.have.property('id');",
+									"});",
+									"",
+									"pm.test('Response has correct prestamoId', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response.prestamoId).to.eql('{{prestamo_id}}');",
+									"});",
+									"",
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('pago_id', response.id);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Pago Capital\",\n  \"prestamoId\": \"{{prestamo_id}}\",\n  \"fecha\": \"2024-01-20T14:30:00.000Z\",\n  \"monto\": 10000,\n  \"restante\": 40000,\n  \"tipo\": \"capital\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/pagos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pagos"
+							]
+						},
+						"description": "Create a new payment for a loan"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Pagos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pagos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pagos"
+							]
+						},
+						"description": "Retrieve all payments from the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pagos by Prestamo ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response is an array', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.be.an('array');",
+									"});",
+									"",
+									"pm.test('All pagos belong to the correct prestamo', function () {",
+									"    const response = pm.response.json();",
+									"    response.forEach(pago => {",
+									"        pm.expect(pago.prestamoId).to.eql('{{prestamo_id}}');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pagos/{{prestamo_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pagos",
+								"{{prestamo_id}}"
+							]
+						},
+						"description": "Retrieve all payments for a specific loan"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for managing payments"
 		}
 	],
 	"event": [
@@ -422,6 +704,18 @@
 		},
 		{
 			"key": "materiales_id",
+			"value": ""
+		},
+		{
+			"key": "prestamo_id",
+			"value": ""
+		},
+		{
+			"key": "prestamo_nombre",
+			"value": "Juan Pérez"
+		},
+		{
+			"key": "pago_id",
 			"value": ""
 		}
 	]
