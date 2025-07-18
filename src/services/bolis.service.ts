@@ -67,17 +67,14 @@ const getBoliByName = async (name: string): Promise<Boli> => {
         throw error;
     }
 }
-const updateStock = async (updatedBolis: BoliUpdate[]) => {
+const updateStock = async (updatedBolis: BoliUpdate) => {
     try {
-        const response = await Promise.all(updatedBolis.map(async (boli) => {
-            return await notion.pages.update({
-                page_id: boli.id,
-                properties: {
-                    cantidad: { number: boli.cantidad },
-                    gananciaPorUnidad: { number: boli.gananciaPorUnidad },
-                }
-            });
-        }));
+        const response = await notion.pages.update({
+            page_id: updatedBolis.id,
+            properties: {
+                cantidad: { number: updatedBolis.cantidad },
+            }
+        });
         return response;
     } catch (error) {
         console.error("Error al actualizar el stock:", error);

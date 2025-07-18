@@ -8,5 +8,4 @@ export interface Boli {
 export interface BoliUpdate {
     id: string;
     cantidad: number;
-    gananciaPorUnidad: number;
 }

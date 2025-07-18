@@ -31,7 +31,7 @@ export const BolisController = {
     },
     updateStock: async (req: Request, res: Response) => {
         try {
-            const boli = await BolisService.updateStock(req.body as BoliUpdate[]);
+            const boli = await BolisService.updateStock(req.body as BoliUpdate);
             res.status(200).json(boli);
         } catch (error) {
             res.status(500).json({ error: "Error al actualizar el stock" });
